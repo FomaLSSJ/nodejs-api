@@ -18,7 +18,11 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+<<<<<<< HEAD
 app.use(bodyParser.urlencoded({ extended: true }));
+=======
+app.use(bodyParser.urlencoded({ extended: false }));
+>>>>>>> 1b0567b2121745098f7fb7469c34e6165f3f04b9
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+<<<<<<< HEAD
 var ArticleModel = require('./libs/mongoose').ArticleModel;
 
 app.get('/api', function(req, res) {
@@ -135,6 +140,8 @@ app.delete('/api/articles/:id', function(req, res) {
   });
 });
 
+=======
+>>>>>>> 1b0567b2121745098f7fb7469c34e6165f3f04b9
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -166,4 +173,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b0567b2121745098f7fb7469c34e6165f3f04b9
 module.exports = app;

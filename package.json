@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "NodeAPI",
+=======
+  "name": "nodejs-api",
+>>>>>>> 1b0567b2121745098f7fb7469c34e6165f3f04b9
   "version": "0.0.0",
   "private": true,
   "scripts": {
