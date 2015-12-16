@@ -1,4 +1,4 @@
-var url = 'http://10.0.4.117';
+var url = 'http://172.25.141.83';
 var port = '1337';
 var api = '/api/articles/';
 
@@ -80,6 +80,10 @@ $(document).ready(function() {
     $('body').on('click', 'button#remArt', function() {
         deleteArticle($('#id').val());
     });
+
+    $('body').on('click', 'button#cls', function() {
+        $('#output').text('');
+    });
 });
 
 function getArticle(id) {
@@ -91,7 +95,7 @@ function getArticle(id) {
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: url + ':' + port + api + id,
+        url: api + id,
         success: function(res) {
             console.log(res);
             $('#output').text('');
@@ -114,7 +118,7 @@ function getArticles() {
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: url + ":" + port + api,
+        url: api,
         success: function(res) {
             console.log(res);
             $('#output').text('');
@@ -130,7 +134,7 @@ function addArticle(title, author, description, images) {
     $.ajax({
         type: 'POST',
         dataTyep: 'json',
-        url: url + ':' + port + api,
+        url: api,
         data: {
             title: title,
             author: author,
@@ -139,6 +143,8 @@ function addArticle(title, author, description, images) {
         },
         success: function(res) {
             console.log(res);
+            $('input').val('');
+            $('#output').text('Article create');
         }
     });
 }
@@ -147,7 +153,7 @@ function editArticle(id, title, author, description, images) {
     $.ajax({
        type: 'PUT',
         dataType: 'json',
-        url: url + ':' + port + api + id,
+        url: api + id,
         data: {
             title: title,
             author: author,
@@ -156,6 +162,8 @@ function editArticle(id, title, author, description, images) {
         },
         success: function(res) {
             console.log(res);
+            $('input').val('');
+            $('#output').text('Article edit');
         }
     });
 }
@@ -164,9 +172,10 @@ function deleteArticle(id) {
     $.ajax({
         type: 'DELETE',
         dataType: 'json',
-        url: url + ':' + port + api + id,
+        url: api + id,
         success: function(res) {
             console.log(res);
+            $('input').val('');
             $('#output').text('Article id: ' + id + ' removed');
         }
     });
