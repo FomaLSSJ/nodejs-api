@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var config = require('./libs/config');
+
 var app = express();
 
 // view engine setup
@@ -16,6 +18,16 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+var allowCrossDomain = function(req, res, next) {
+  //res.setHeader('Access-Control-Allow-Origin', config.get('url') + ':' + config.get('port'));
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept');
+
+  next();
+}
+
+app.use(allowCrossDomain);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

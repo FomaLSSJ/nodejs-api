@@ -1,3 +1,7 @@
+var url = 'http://10.0.4.117';
+var port = '1337';
+var api = '/api/articles/';
+
 $(document).ready(function() {
     $('body').on('click', 'button#getArt', function() {
         $('#advance').text('');
@@ -79,8 +83,6 @@ $(document).ready(function() {
 });
 
 function getArticle(id) {
-    var url = 'http://localhost:1337/api/articles/' + id;
-
     if (id == 'undefined' || id == null) {
         console.log({error: 'ID empty'});
         return false;
@@ -89,11 +91,13 @@ function getArticle(id) {
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: url,
+        url: url + ':' + port + api + id,
         success: function(res) {
             console.log(res);
             $('#output').text('');
-            $('#output').append('TITLE: ' + res.article.title + '<br>' +
+            $('#output').append(
+                    'ID: ' + res.article._id + '<br>' +
+                    'TITLE: ' + res.article.title + '<br>' +
                     'AUTHOR: ' + res.article.author + '<br>' +
                     'DESCRIPTION: ' + res.article.description + '<br>'
             );
@@ -110,12 +114,13 @@ function getArticles() {
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: 'http://localhost:1337/api/articles',
+        url: url + ":" + port + api,
         success: function(res) {
             console.log(res);
             $('#output').text('');
             $.each(res, function(i) {
-                $('#output').append('ID: ' + res[i]._id + '</br>');
+                var id = res[i]._id;
+                $('#output').append('ID: <a onclick="getArticle(\'' + id + '\');">' + id + '</a></br>');
             });
         }
     });
@@ -125,7 +130,7 @@ function addArticle(title, author, description, images) {
     $.ajax({
         type: 'POST',
         dataTyep: 'json',
-        url: 'http://localhost:1337/api/articles',
+        url: url + ':' + port + api,
         data: {
             title: title,
             author: author,
@@ -139,12 +144,10 @@ function addArticle(title, author, description, images) {
 }
 
 function editArticle(id, title, author, description, images) {
-    var url = 'http://localhost:1337/api/articles/' + id;
-
     $.ajax({
        type: 'PUT',
         dataType: 'json',
-        url: url,
+        url: url + ':' + port + api + id,
         data: {
             title: title,
             author: author,
@@ -158,12 +161,10 @@ function editArticle(id, title, author, description, images) {
 }
 
 function deleteArticle(id) {
-    var url = 'http://localhost:1337/api/articles/' + id;
-
     $.ajax({
         type: 'DELETE',
         dataType: 'json',
-        url: url,
+        url: url + ':' + port + api + id,
         success: function(res) {
             console.log(res);
             $('#output').text('Article id: ' + id + ' removed');
