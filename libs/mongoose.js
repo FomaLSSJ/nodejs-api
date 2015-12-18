@@ -1,5 +1,7 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 var config = require('./config');
+
 
 mongoose.connect(config.get('mongoose:uri'));
 var db = mongoose.connection;
@@ -12,7 +14,13 @@ db.once('open', function callback() {
    console.log('\x1b[35mConnection to DB\x1b[0m');
 });
 
-var Schema = mongoose.Schema;
+var User = new Schema({
+   username: String,
+   password: String
+});
+
+var UserModel = mongoose.model('User', User);
+module.exports.UserModel = UserModel;
 
 var Images = new Schema({
    kind: {
@@ -51,5 +59,4 @@ Article.path('title').validate(function(v) {
 });
 
 var ArticleModel = mongoose.model('Article', Article);
-
 module.exports.ArticleModel = ArticleModel;

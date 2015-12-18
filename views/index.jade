@@ -4,6 +4,11 @@ block content
   h1= title
   p Used #{using}
   hr
+  form(action="/users/login" method="post")
+    input(type="submit" value="Submit")
+    input(type="text" name="username" placeholder="Username")
+    input(type="password" name="password" placeholder="Password")
+  hr
   button#getArt Get Article
   button#getArts Get Articles
   button#addArt Add Article
