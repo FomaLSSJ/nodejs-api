@@ -2,8 +2,12 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+var UserModel = require('../libs/mongoose').UserModel;
+
 router.get('/', function(req, res, next) {
-    res.render('login');
+    return UserModel.find({}, {password: 0}, function(err, user) {
+        return res.send(user);
+    });
 });
 
 router.post('/login', passport.authenticate(
