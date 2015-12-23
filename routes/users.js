@@ -52,8 +52,7 @@ router.get('/loginFailure', function(req, res, next) {
 });
 
 router.get('/loginSuccess', function(req, res, next) {
-    req.session.destroy();
-    req.session.userid = req.user._id;
+    req.session.userid = req.user.sid;
     req.session.auth = true;
     return res.send({status: true, message: 'Successfully authenticated'});
 });
