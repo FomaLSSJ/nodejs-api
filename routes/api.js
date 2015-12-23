@@ -103,15 +103,19 @@ router.delete('/articles/:id', function(req, res) {
         if (!req.session.auth) {
             return res.send({status: false, error: 'You not auth'});
         } else {
-            return article.remove(function(err) {
-                if (!err) {
-                    console.log('Article removed');
-                    return res.send({status: true});
-                } else {
-                    console.log('Internal error(' + res.statusCode + '): ' + err.message);
-                    return res.send({status: false, error: 'Server error'});
-                }
-            });
+            if (article.author != req.session.userid) {
+                res.send({status: false, error: 'You not owner this article'});
+            } else {
+                return article.remove(function (err) {
+                    if (!err) {
+                        console.log('Article removed');
+                        return res.send({status: true});
+                    } else {
+                        console.log('Internal error(' + res.statusCode + '): ' + err.message);
+                        return res.send({status: false, error: 'Server error'});
+                    }
+                });
+            }
         }
     });
 });
