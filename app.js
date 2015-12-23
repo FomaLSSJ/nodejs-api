@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -35,6 +36,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session({
+  secret: config.get('secret'),
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 1000*60*60*24
+  }
+}));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -59,10 +70,11 @@ passport.use(new LocalStrategy(function(username, password, done) {
         return done(err);
       } else if (!user) {
         return done(null, false);
-      } else if (user.password != password) {
+      } else if (user.isValidPassword(password)) {
+        return done(null, user);
+      } else {
         return done(null, false);
       }
-      return done(null, user);
     });
   });
 }));

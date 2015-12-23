@@ -4,7 +4,11 @@ block content
   h1= title
   p Used #{using}
   hr
-  form(action="/users/login" method="post")
+  button#log Login
+  button#reg Register
+  input#username(type="text" placeholder="Username")
+  input#password(type="password" placeholder="Password")
+  //form(action="/users/login" method="post")
     input(type="submit" value="Submit")
     input(type="text" name="username" placeholder="Username")
     input(type="password" name="password" placeholder="Password")

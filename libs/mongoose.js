@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
-var config = require('./config');
-
+    Schema = mongoose.Schema,
+    config = require('./config'),
+    crypto = require('crypto'),
+    uuid = require('node-uuid');
 
 mongoose.connect(config.get('mongoose:uri'));
 var db = mongoose.connection;
@@ -15,9 +16,33 @@ db.once('open', function callback() {
 });
 
 var User = new Schema({
-   username: String,
-   password: String
+   username: {
+      type: String,
+      required: true,
+      unique: true
+   },
+   password: {
+      type: String,
+      required: true
+   },
+   salt: {
+      type: String,
+      required: true,
+      default: uuid.v1
+   }
 });
+
+var hash = function(password, salt) {
+   return crypto.createHmac('sha256', salt).update(password).digest('hex');
+};
+
+User.methods.setPassword = function(password) {
+   this.password = hash(password, this.salt);
+};
+
+User.methods.isValidPassword = function(password) {
+   return this.password === hash(password, this.salt);
+};
 
 var UserModel = mongoose.model('User', User);
 module.exports.UserModel = UserModel;

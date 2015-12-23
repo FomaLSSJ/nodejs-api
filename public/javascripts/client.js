@@ -1,8 +1,17 @@
-var url = 'http://172.25.141.83';
 var port = '1337';
 var api = '/api/articles/';
+var login = '/users/login';
+var register = '/users/register';
 
 $(document).ready(function() {
+    $('body').on('click', 'button#log', function() {
+        postLogin($('#username').val(), $('#password').val());
+    });
+
+    $('body').on('click', 'button#reg', function() {
+        postRegister($('#username').val(), $('#password').val());
+    });
+
     $('body').on('click', 'button#getArt', function() {
         $('#advance').text('');
         $('#advance').append(
@@ -86,6 +95,36 @@ $(document).ready(function() {
     });
 });
 
+function postLogin(username, password) {
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: login,
+        data: {
+            username: username,
+            password: password
+        },
+        success: function(res) {
+            console.log(res);
+        }
+    });
+}
+
+function postRegister(username, password) {
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: register,
+        data: {
+            username: username,
+            password: password
+        },
+        success: function(res) {
+            console.log(res);
+        }
+    });
+}
+
 function getArticle(id) {
     if (id == 'undefined' || id == null) {
         console.log({error: 'ID empty'});
@@ -143,8 +182,12 @@ function addArticle(title, author, description, images) {
         },
         success: function(res) {
             console.log(res);
-            $('input').val('');
-            $('#output').text('Article create');
+            if (res.status) {
+                $('input').val('');
+                $('#output').text('Article create');
+            } else {
+                $('#output').text(res.error);
+            }
         }
     });
 }
@@ -162,8 +205,12 @@ function editArticle(id, title, author, description, images) {
         },
         success: function(res) {
             console.log(res);
-            $('input').val('');
-            $('#output').text('Article edit');
+            if (res.status) {
+                $('input').val('');
+                $('#output').text('Article edit');
+            } else {
+                $('#output').text(res.error);
+            }
         }
     });
 }
@@ -175,8 +222,13 @@ function deleteArticle(id) {
         url: api + id,
         success: function(res) {
             console.log(res);
-            $('input').val('');
-            $('#output').text('Article id: ' + id + ' removed');
+            if (res.status) {
+                $('input').val('');
+                $('#output').text('Article id: ' + id + ' removed');
+            } else {
+                $('#output').text(res.error);
+            }
+
         }
     });
 }
