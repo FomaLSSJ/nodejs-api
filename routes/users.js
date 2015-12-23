@@ -23,17 +23,21 @@ router.post('/register', function(req, res) {
     user.save(function(err) {
         if (!err) {
             console.log('User created');
-            return res.send({status: 'OK', user: user});
+            req.session.userid = user.id;
+            req.session.auth = true;
+            return res.send({status: true, message: 'User created', user: user});
         } else if (err.name == 'ValidationError') {
-            return res.send({status: false, error: 'Validation error', err: err});
-        } else {
+            return res.send({status: false, message: 'Validation error', err: err});
+        } else if (err.code == 11000) {
+            return res.send({status: false, message: 'Username exist', err: err});
+        } {
             return res.send({status: false, message: 'Failed', err: err});
         }
     });
 });
 
 router.get('/login', function(req, res) {
-    return res.send({status: true, auth: req.session.auth});
+    return res.send({status: true, userid: req.session.userid, auth: req.session.auth});
 });
 
 router.post('/login', passport.authenticate(
@@ -44,11 +48,12 @@ router.post('/login', passport.authenticate(
 ));
 
 router.get('/loginFailure', function(req, res, next) {
-    req.session.auth = false;
     return res.send({status: false, message: 'Failed to authenticate'});
 });
 
 router.get('/loginSuccess', function(req, res, next) {
+    req.session.destroy();
+    req.session.userid = req.user._id;
     req.session.auth = true;
     return res.send({status: true, message: 'Successfully authenticated'});
 });

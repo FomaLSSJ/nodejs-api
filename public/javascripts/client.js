@@ -29,7 +29,6 @@ $(document).ready(function() {
         $('#advance').append(
             '<button id="pushArt">Push Article</button>' +
             '<input id="title" type="text" placeholder="Title" />' +
-            '<input id="author" type="text" placeholder="Author" />' +
             '<input id="description" type="text" placeholder="Description" />' +
             '<input id="thumbnail" type="text" placeholder="Thumbnail URL" />' +
             '<input id="detail" type="text" placeholder="Detail URL" />'
@@ -54,7 +53,6 @@ $(document).ready(function() {
             '<button id="putArt">Put Article</button>' +
             '<input id="id" type="text" placeholder="Id" />' +
             '<input id="title" type="text" placeholder="Title" />' +
-            '<input id="author" type="text" placeholder="Author" />' +
             '<input id="description" type="text" placeholder="Description" />' +
             '<input id="thumbnail" type="text" placeholder="Thumbnail URL" />' +
             '<input id="detail" type="text" placeholder="Detail URL" />'
@@ -106,6 +104,7 @@ function postLogin(username, password) {
         },
         success: function(res) {
             console.log(res);
+            $('#output').text(res.message);
         }
     });
 }
@@ -121,6 +120,7 @@ function postRegister(username, password) {
         },
         success: function(res) {
             console.log(res);
+            $('#output').text(res.message);
         }
     });
 }
@@ -176,7 +176,6 @@ function addArticle(title, author, description, images) {
         url: api,
         data: {
             title: title,
-            author: author,
             description: description,
             images: images
         },
@@ -199,7 +198,6 @@ function editArticle(id, title, author, description, images) {
         url: api + id,
         data: {
             title: title,
-            author: author,
             description: description,
             images: images
         },

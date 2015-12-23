@@ -1,8 +1,17 @@
 {
-  "url": "http://10.0.4.117",
   "port": 1337,
-  "secret" : "La-Li-Lu-Le-Lo",
   "mongoose": {
     "uri": "mongodb://localhost/test"
+  },
+  "session" : {
+    "secret" : "La-Li-Lu-Le-Lo",
+    "key": "sid",
+    "resave": false,
+    "saveUninitialized": true,
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
   }
 }

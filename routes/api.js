@@ -22,7 +22,7 @@ router.get('/articles', function(req, res) {
 router.post('/articles', function(req, res) {
     var article = new ArticleModel({
         title: req.body.title,
-        author: req.body.author,
+        author: req.session.userid,
         description: req.body.description,
         images:req.body.images
     });
@@ -68,25 +68,28 @@ router.put('/articles/:id', function(req, res) {
 
         article.title = req.body.title;
         article.description = req.body.description;
-        article.author = req.body.author;
         article.images = req.body.images;
 
         if (!req.session.auth) {
             return res.send({status: false, error: 'You not auth'});
         } else {
-            return article.save(function(err) {
-                if (!err) {
-                    console.log('Article update');
-                    return res.send({status: true, article: article});
-                } else {
-                    if (err.name == 'ValidationError') {
-                        res.send({status: false, error: 'Validation error'});
+            if (article.author != req.session.userid) {
+                res.send({status: false, error: 'You not owner this article'});
+            } else {
+                return article.save(function(err) {
+                    if (!err) {
+                        console.log('Article update');
+                        return res.send({status: true, article: article});
                     } else {
-                        res.send({status: false, error: 'Server error'});
+                        if (err.name == 'ValidationError') {
+                            res.send({status: false, error: 'Validation error'});
+                        } else {
+                            res.send({status: false, error: 'Server error'});
+                        }
+                        console.log('Internal error(' + res.statusCode + '): ' + err.message);
                     }
-                    console.log('Internal error(' + res.statusCode + '): ' + err.message);
-                }
-            });
+                });
+            }
         }
     });
 });
