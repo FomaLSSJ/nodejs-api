@@ -47,40 +47,55 @@ User.methods.isValidPassword = function(password) {
 var UserModel = mongoose.model('User', User);
 module.exports.UserModel = UserModel;
 
+var Titles = new Schema({
+   kind: {
+      type: String,
+      enum: ['english', 'japan'],
+      required: true
+   },
+   value: {
+      type: String,
+      required: true
+   }
+});
+
+var Infos = new Schema({
+   kind: {
+      type: String,
+      enum: ['pub_eng', 'pub_jap', 'release', 'media'],
+      required: true
+   },
+   value: {
+      type: String,
+      required: true
+   }
+});
+
 var Images = new Schema({
    kind: {
       type: String,
-      enum: ['thumbnail', 'detail'],
-      required: true
+      enum: ['thumbnail', 'screen', 'cover']
    },
    url: {
-      type: String,
-      required: true
+      type: String
    }
 });
 
 var Article = new Schema({
-   title: {
-      type: String,
-      required: true
-   },
-   author: {
-      type: String,
-      required: true
-   },
-   description: {
+   titles: [Titles],
+   infos: [Infos],
+   owner: {
       type: String,
       required: true
    },
    images: [Images],
+   note: {
+      type: String
+   },
    modified: {
       type: Date,
       default: Date.now
    }
-});
-
-Article.path('title').validate(function(v) {
-   return v.length > 5 && v.length < 70;
 });
 
 var ArticleModel = mongoose.model('Article', Article);

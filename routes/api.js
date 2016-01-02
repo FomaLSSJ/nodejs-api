@@ -21,10 +21,9 @@ router.get('/articles', function(req, res) {
 
 router.post('/articles', function(req, res) {
     var article = new ArticleModel({
-        title: req.body.title,
-        author: req.session.userid,
-        description: req.body.description,
-        images:req.body.images
+        titles: req.body.titles,
+        infos: req.body.infos,
+        owner: req.session.userid
     });
 
     if (!req.session.auth) {
@@ -36,7 +35,7 @@ router.post('/articles', function(req, res) {
                 return res.send({status: true, article: article});
             } else {
                 if (err.name == 'ValidationError') {
-                    res.send({status: false, error: 'Validation error'});
+                    res.send({status: false, error: 'Validation error', err: err});
                 } else {
                     res.send({status: false, error: 'Server error'});
                 }
@@ -58,6 +57,33 @@ router.get('/articles/:id', function(req, res) {
             return res.send({status: false, error: 'Server error'});
         }
     });
+});
+
+router.post('/articles/image/', function(req, res) {
+    return req.send({status: false, message: 'Not found ID item'});
+});
+
+router.post('/articles/image/:id', function(req, res) {
+    if (!req.session.auth) {
+        return res.send({status: false, error: 'You not auth'});
+    } else {
+        var item = {
+            kind: req.body.kind,
+            url: req.body.url
+        };
+
+        return ArticleModel.findByIdAndUpdate(req.params.id, {$push: {images: item}}, function (err, article) {
+            if (!article) {
+                return res.send({status: false, error: 'Not found'});
+            }
+
+            if (!err) {
+                return res.send({status: true, article: article});
+            } else {
+                return res.send({status: false, err: err});
+            }
+        });
+    }
 });
 
 router.put('/articles/:id', function(req, res) {
