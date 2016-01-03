@@ -1,6 +1,21 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var multer = require('multer');
+var mime = require('mime');
+
+var url = 'https://nodejs-api-fomalssj.c9users.io/';
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/images/users')
+    },
+    filename: function (req, file, cb) {
+        cb(null, req.session.userid + '-' + Date.now() + '.' + mime.extension(file.mimetype))
+    }
+});
+
+var upload = multer({storage: storage}).single('userPhoto');
 
 var UserModel = require('../libs/mongoose').UserModel;
 
@@ -8,6 +23,28 @@ router.get('/', function(req, res, next) {
     return UserModel.find({}, {password: 0, salt: 0}, function(err, user) {
         return res.send(user);
     });
+});
+
+router.post('/upload', function(req, res) {
+    if (!req.session.auth) {
+        return res.send({status: false, error: 'You not auth'});
+    } else {
+        upload(req, res, function(err) {
+            if (err) {
+                return res.send({status: false, message: 'Error uploading file'});
+            }
+            
+            UserModel.findByIdAndUpdate(req.session.userid, {image: req.file.path}, function(err, user) {
+                if (!user) {
+                    return res.send({status: false, error: 'Not found'});
+                }
+                
+                if (!err) {
+                    return res.send({status: true, message: 'File is uploaded', user: user});
+                }
+            });
+        });
+    }
 });
 
 router.get('/register', function(req, res) {
@@ -54,7 +91,7 @@ router.get('/loginFailure', function(req, res, next) {
 router.get('/loginSuccess', function(req, res, next) {
     req.session.userid = req.user._id;
     req.session.auth = true;
-    return res.send({status: true, message: 'Successfully authenticated'});
+    return res.send({status: true, message: 'Successfully authenticated', name: req.user.username});
 });
 
 module.exports = router;

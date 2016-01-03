@@ -29,6 +29,9 @@ var User = new Schema({
       type: String,
       required: true,
       default: uuid.v1
+   },
+   image: {
+      type: String
    }
 });
 

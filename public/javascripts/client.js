@@ -258,7 +258,8 @@ function getArticles() {
             $('#output').text('');
             $.each(res, function(i) {
                 var id = res[i]._id;
-                $('#output').append('ID: <a onclick="getArticle(\'' + id + '\');">' + id + '</a></br>');
+                var title = res[i].titles[0].value;
+                $('#output').append('Title: <a onclick="getArticle(\'' + id + '\');">' + title + '</a></br>');
             });
         }
     });
