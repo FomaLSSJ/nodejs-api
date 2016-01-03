@@ -11,7 +11,7 @@ var storage = multer.diskStorage({
         cb(null, './public/images/users')
     },
     filename: function (req, file, cb) {
-        cb(null, req.session.userid + '-' + Date.now() + '.' + mime.extension(file.mimetype))
+        cb(null, req.session.userid + '.' + mime.extension(file.mimetype))
     }
 });
 
@@ -34,7 +34,7 @@ router.post('/upload', function(req, res) {
                 return res.send({status: false, message: 'Error uploading file'});
             }
             
-            UserModel.findByIdAndUpdate(req.session.userid, {image: req.file.path}, function(err, user) {
+            UserModel.findByIdAndUpdate(req.session.userid, {image: req.file.filename}, function(err, user) {
                 if (!user) {
                     return res.send({status: false, error: 'Not found'});
                 }
@@ -91,7 +91,7 @@ router.get('/loginFailure', function(req, res, next) {
 router.get('/loginSuccess', function(req, res, next) {
     req.session.userid = req.user._id;
     req.session.auth = true;
-    return res.send({status: true, message: 'Successfully authenticated', name: req.user.username});
+    return res.send({status: true, message: 'Successfully authenticated', name: req.user.username, image: req.user.image});
 });
 
 module.exports = router;
