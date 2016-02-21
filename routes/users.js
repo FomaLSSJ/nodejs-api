@@ -30,6 +30,10 @@ router.post('/upload', function(req, res) {
         return res.send({status: false, error: 'You not auth'});
     } else {
         upload(req, res, function(err) {
+            if (req.file.filename == undefined) {
+                return res.send({status: false, message: 'File undefined'});
+            }
+            
             if (err) {
                 return res.send({status: false, message: 'Error uploading file'});
             }
@@ -40,7 +44,7 @@ router.post('/upload', function(req, res) {
                 }
                 
                 if (!err) {
-                    return res.send({status: true, message: 'File is uploaded', user: user});
+                    return res.send({status: true, message: 'File is uploaded', image: user.image});
                 }
             });
         });

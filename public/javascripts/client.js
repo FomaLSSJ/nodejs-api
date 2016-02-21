@@ -134,14 +134,37 @@ $(document).ready(function() {
         deleteArticle($('#id').val());
     });
 
+    $('body').on('click', 'button#showGame', function() {
+        $('#output').html('<object data="/files/SuperRocketAdventure.swf" width="640" height="480"></object>');
+    });
+
     $('body').on('click', 'button#cls', function() {
         $('#output').text('');
+    });
+    
+    $('body').on('submit', '#uploadForm', function(e) {
+       submitImage(e);
     });
 });
 
 String.prototype.letter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
+
+function submitImage(e) {
+    //e.preventDefault();
+    
+    $(this).ajaxSubmit({
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr) {
+            status('Error: ' + xhr.status);
+        }
+    });
+    
+    return false;
+}
 
 function sortData(json, kind) {
     if (!json.length) {
