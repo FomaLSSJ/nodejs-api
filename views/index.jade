@@ -1,26 +1,72 @@
 extends layout
 
+block header
+  script(src='/javascripts/controllers/indexController.js')
+
 block content
-  h1= title
-  p Used #{using}
-  hr
-  button#log Login
-  button#reg Register
-  input#username(type="text" placeholder="Username")
-  input#password(type="password" placeholder="Password")
-  br
-  form#uploadForm(enctype="multipart/form-data" action="/users/upload" method="post")
-    input(type="file" name="userPhoto")
-    input(type="submit" value="Upload Image" name="submit")
-  hr
-  button#getArt Get Article
-  button#getArts Get Articles
-  button#addArt Add Article
-  button#addImg Add Images
-  button#editArt Edit Article
-  button#delArt Delete Article
-  button#showGame Show Game
-  button#cls CLS
-  hr
-  div#advance
-  div#output
+  body(ng-app="indexApp")
+    nav.navbar.navbar-default.navbar-fixed-top
+      div.container(ng-controller="menuCtrl")
+        div.navbar-header
+            button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href="#") NodeAPI
+        div#navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li
+              a(href="/") Home
+            li.dropdown
+              a.dropdown-toggle(href="" data-toggle="dropdown" role="button" aria-expanded="false") Functions
+                span.caret
+              ul.dropdown-menu
+                li.dropdown-header Get
+                li
+                  a(href="" ui-sref="getArt") Article
+                li
+                  a(href="" ui-sref="getArts") Articles
+                li.divider(role="separator")
+                li.dropdown-header Add
+                li
+                  a(href="#") Article
+                li
+                  a(href="#") Images
+                li.divider(role="separator")
+                li.dropdown-header Edit
+                li
+                  a(href="#") Article
+                li.divider(role="separator")
+                li.dropdown-header Delete
+                li
+                  a(href="#") Article
+                li.divider(role="separator")
+                li.dropdown-header Game
+                li
+                  a(href="#") Show
+          div.navbar-form.navbar-right(role="form")
+            div(ng-show="user.auth")
+              button.btn.btn-default(ng-click="getLogout()") Logout
+            div(ng-show="!user.auth")
+              div.form-group
+                input.form-control(type="text" ng-model="user.username" placeholder="Username")
+              div.form-group
+                input.form-control(type="password" ng-model="user.password" placeholder="Password")
+              button.btn.btn-default(ng-click="postLogin()") Login
+    div.container
+      h1= title
+      p Used #{using}
+      hr
+      form#uploadForm.row(enctype="multipart/form-data" action="/users/upload" method="post")
+        div.col-md-6
+          input(type="file" name="userPhoto" class="filestyle" data-icon="false")
+        div.col-md-6
+          input.btn.btn-default(type="submit" value="Upload Image" name="submit")
+      hr
+      div(ui-view)
+      hr
+      div#advance
+      div.panel.panel-default
+        div.panel-heading Output
+        div.panel-body None

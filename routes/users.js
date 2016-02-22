@@ -95,7 +95,12 @@ router.get('/loginFailure', function(req, res, next) {
 router.get('/loginSuccess', function(req, res, next) {
     req.session.userid = req.user._id;
     req.session.auth = true;
-    return res.send({status: true, message: 'Successfully authenticated', name: req.user.username, image: req.user.image});
+    return res.send({status: true, message: 'Successfully authenticated', name: req.user.username, image: req.user.image, auth: req.session.auth});
+});
+
+router.get('/logout', function(req, res) {
+    req.session.destroy();
+    return res.send({status: true, message: 'You logout'});
 });
 
 module.exports = router;
