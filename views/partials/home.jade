@@ -1,0 +1,5 @@
+div(ng-if="!user.auth")
+    h3 Please, login or register
+div(ng-if="user.auth")
+    h3 Hello {{ user.name }}!
+    

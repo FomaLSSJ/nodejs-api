@@ -1,2 +1,9 @@
-p
-    | Get Articles
+h2 Get Articles
+div(ng-repeat="article in request")
+    div.row
+        div.col-md-12
+            a(ui-sref="home.article.all.detail({ id:article._id })")
+                h3
+                    span(ng-repeat="title in article.titles | filter:{kind:'english'} | limitTo:1" ng-bind="title.value")
+                    &nbsp;&mdash;&nbsp;
+                    span(ng-repeat="title in article.titles | filter:{kind:'japan'} | limitTo:1" ng-bind="title.value")

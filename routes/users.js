@@ -61,6 +61,8 @@ router.post('/register', function(req, res) {
     });
     user.setPassword(req.body.password);
 
+    console.log('name:' + req.body.username + ' pass:' + req.body.password);
+
     user.save(function(err) {
         if (!err) {
             console.log('User created');
@@ -78,7 +80,10 @@ router.post('/register', function(req, res) {
 });
 
 router.get('/login', function(req, res) {
-    return res.send({status: true, userid: req.session.userid, auth: req.session.auth});
+    if (typeof req.session.passport == 'undefined') {
+        return res.send({status: false, message: 'Not logging'});
+    }
+    return res.send({status: true, name: req.session.passport.user.username, userid: req.session.passport.user._id, auth: req.session.auth});
 });
 
 router.post('/login', passport.authenticate(
@@ -93,7 +98,6 @@ router.get('/loginFailure', function(req, res, next) {
 });
 
 router.get('/loginSuccess', function(req, res, next) {
-    req.session.userid = req.user._id;
     req.session.auth = true;
     return res.send({status: true, message: 'Successfully authenticated', name: req.user.username, image: req.user.image, auth: req.session.auth});
 });

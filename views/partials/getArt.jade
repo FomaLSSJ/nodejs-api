@@ -2,4 +2,4 @@ h2 Get Article
 div.form-inline
     div.form-group
         input.form-control(type="text" ng-model="article.id" placeholder="Article ID")
-    button.btn.btn-default(ng-click="getArticle(article.id)") Get
+    button.btn.btn-default(ui-sref="home.article.detail({ id:article.id })") Get

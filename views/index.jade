@@ -17,16 +17,16 @@ block content
         div#navbar.navbar-collapse.collapse
           ul.nav.navbar-nav
             li
-              a(href="/") Home
+              a(ui-sref="home") Home
             li.dropdown
               a.dropdown-toggle(href="" data-toggle="dropdown" role="button" aria-expanded="false") Functions
                 span.caret
               ul.dropdown-menu
                 li.dropdown-header Get
                 li
-                  a(href="" ui-sref="getArt") Article
+                  a(href="" ui-sref="home.article") Article
                 li
-                  a(href="" ui-sref="getArts") Articles
+                  a(href="" ui-sref="home.article.all") Articles
                 li.divider(role="separator")
                 li.dropdown-header Add
                 li
@@ -53,7 +53,10 @@ block content
                 input.form-control(type="text" ng-model="user.username" placeholder="Username")
               div.form-group
                 input.form-control(type="password" ng-model="user.password" placeholder="Password")
-              button.btn.btn-default(ng-click="postLogin()") Login
+              div.form-group
+                button.btn.btn-default(ng-click="postLogin()") Login
+              div.form-group
+                button.btn.btn-default(ng-click="postRegister()") Register
     div.container
       h1= title
       p Used #{using}
@@ -64,9 +67,10 @@ block content
         div.col-md-6
           input.btn.btn-default(type="submit" value="Upload Image" name="submit")
       hr
-      div(ui-view)
+      div(ui-view="control")
       hr
       div#advance
       div.panel.panel-default
         div.panel-heading Output
-        div.panel-body None
+        div.panel-body
+          div(ui-view="output")
