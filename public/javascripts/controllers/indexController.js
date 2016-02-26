@@ -165,7 +165,8 @@ indexApp.controller('menuCtrl', ['$scope', '$http', 'userService', 'statusServic
         $http({
             method:'POST',
             url:'/users/register',
-            params:$scope.user
+            data:$.param({username: $scope.user.username, password: $scope.user.password}),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function(res) {
             statusService.set(res.data);
         })

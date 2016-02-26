@@ -65,9 +65,6 @@ router.post('/register', function(req, res) {
 
     user.save(function(err) {
         if (!err) {
-            console.log('User created');
-            req.session.userid = user.id;
-            req.session.auth = true;
             return res.send({status: true, message: 'User created', user: user});
         } else if (err.name == 'ValidationError') {
             return res.send({status: false, message: 'Validation error', err: err});
